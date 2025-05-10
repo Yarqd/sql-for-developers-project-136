@@ -36,7 +36,7 @@ CREATE TABLE lessons(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     course_id BIGINT NOT NULL REFERENCES Courses(id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE,,
+        ON DELETE CASCADE,
     deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -51,3 +51,24 @@ CREATE TABLE program_modules (
     module_id BIGINT NOT NULL REFERENCES modules (id) ON DELETE CASCADE,
     PRIMARY KEY (program_id, module_id)
 );
+
+CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+CREATE TABLE users(
+    id BIGINT PRIMARY KEY,
+    name VARCHAR (50) NOT NULL,
+    role user_role NOT NULL,
+    email text NOT NULL,
+    password VARCHAR (50) NOT NULL,
+    teaching_group_id BIGINT NOT NULL REFERENCES teaching_groups(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE teaching_groups (
+    id BIGINT PRIMARY KEY,
+    slug VARCHAR (20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
