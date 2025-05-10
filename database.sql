@@ -110,8 +110,8 @@ CREATE TABLE certificates (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
     program_id BIGINT NOT NULL REFERENCES programs(id),
-    certificate_url VARCHAR (200),
-    certificate_creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    url VARCHAR (200),
+    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -120,7 +120,7 @@ CREATE TABLE quizzes (
     id BIGINT PRIMARY KEY,
     lesson_id BIGINT NOT NULL REFERENCES lessons(id),
     test_name VARCHAR(50) NOT NULL,
-    test_content text,
+    content text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -128,8 +128,8 @@ CREATE TABLE quizzes (
 CREATE TABLE exercises (
     id BIGINT PRIMARY KEY,
     lesson_id BIGINT NOT NULL REFERENCES lessons(id),
-    exercise_name VARCHAR(50) NOT NULL,
-    exercise_url VARCHAR (200),
+    name VARCHAR(50) NOT NULL,
+    url VARCHAR (200),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -137,7 +137,7 @@ CREATE TABLE exercises (
 CREATE TABLE discussions(
     id BIGINT PRIMARY KEY,
     lesson_id BIGINT NOT NULL REFERENCES lessons(id),
-    discussion text,
+    text text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -146,8 +146,8 @@ CREATE TYPE status AS ENUM ('created', 'in_moderation', 'published', 'archived')
 CREATE TABLE blog (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
-    article_title VARCHAR(50) NOT NULL,
-    article_text text,
+    name VARCHAR(50) NOT NULL,
+    content text,
     article_status status NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
