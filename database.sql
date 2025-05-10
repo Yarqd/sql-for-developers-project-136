@@ -57,7 +57,7 @@ CREATE TABLE users(
     id BIGINT PRIMARY KEY,
     name VARCHAR (50) NOT NULL UNIQUE,
     role user_role NOT NULL,
-    email text NOT NULL,
+    email text NOT NULL UNIQUE,
     password VARCHAR (50) NOT NULL,
     teaching_group_id BIGINT NOT NULL REFERENCES teaching_groups(id)
         ON UPDATE CASCADE
@@ -68,7 +68,7 @@ CREATE TABLE users(
 
 CREATE TABLE teaching_groups (
     id BIGINT PRIMARY KEY,
-    slug VARCHAR (20) NOT NULL,
+    slug VARCHAR (20) NOT NULL UNIQUE ,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -130,6 +130,25 @@ CREATE TABLE exercises (
     lesson_id BIGINT NOT NULL REFERENCES lessons(id),
     exercise_name VARCHAR(50) NOT NULL,
     exercise_url VARCHAR (200),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE discussions(
+    id BIGINT PRIMARY KEY,
+    lesson_id BIGINT NOT NULL REFERENCES lessons(id),
+    discussion text,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TYPE status AS ENUM ('created', 'in_moderation', 'published', 'archived');
+CREATE TABLE blog (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id),
+    article_title VARCHAR(50) NOT NULL,
+    article_text text,
+    article_status status NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
