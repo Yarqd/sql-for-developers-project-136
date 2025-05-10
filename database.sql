@@ -1,8 +1,8 @@
 CREATE TABLE programs(
     id BIGINT PRIMARY KEY,
-    title VARCHAR (50) NOT NULL,
+    name VARCHAR (50) NOT NULL,
     price NUMERIC (10, 2) NOT NULL,
-    type VARCHAR (30) NOT NULL,
+    program_type VARCHAR (30) NOT NULL,
     description text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -10,7 +10,7 @@ CREATE TABLE programs(
 
 CREATE TABLE modules(
     id BIGINT PRIMARY KEY,
-    title VARCHAR (50) NOT NULL,
+    name VARCHAR (50) NOT NULL,
     description text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -19,7 +19,7 @@ CREATE TABLE modules(
 
 CREATE TABLE courses(
     id BIGINT PRIMARY KEY,
-    title VARCHAR (50) NOT NULL,
+    name VARCHAR (50) NOT NULL,
     description text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -28,7 +28,7 @@ CREATE TABLE courses(
 
 CREATE TABLE lessons(
     id BIGINT PRIMARY KEY,
-    title VARCHAR (50) NOT NULL,
+    name VARCHAR (50) NOT NULL,
     content text,
     video_url VARCHAR (200),
     position   INT NOT NULL CHECK (position > 0),
