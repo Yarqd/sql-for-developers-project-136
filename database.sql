@@ -14,7 +14,7 @@ CREATE TABLE modules(
     description text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    deleted_at TIMESTAMP DEFAULT NULL
 );
 
 CREATE TABLE courses(
@@ -23,7 +23,7 @@ CREATE TABLE courses(
     description text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    deleted_at TIMESTAMP DEFAULT NULL
 );
 
 CREATE TABLE lessons(
@@ -37,7 +37,7 @@ CREATE TABLE lessons(
     course_id BIGINT NOT NULL REFERENCES Courses(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    deleted_at TIMESTAMP DEFAULT NULL
 );
 
 CREATE TABLE module_courses (
@@ -55,7 +55,7 @@ CREATE TABLE program_modules (
 CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 CREATE TABLE users(
     id BIGINT PRIMARY KEY,
-    name VARCHAR (50) NOT NULL,
+    name VARCHAR (50) NOT NULL UNIQUE,
     role user_role NOT NULL,
     email text NOT NULL,
     password VARCHAR (50) NOT NULL,
@@ -110,8 +110,26 @@ CREATE TABLE certificates (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
     program_id BIGINT NOT NULL REFERENCES programs(id),
-    certificates_url VARCHAR (200),
+    certificate_url VARCHAR (200),
     certificate_creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE quizzes (
+    id BIGINT PRIMARY KEY,
+    lesson_id BIGINT NOT NULL REFERENCES lessons(id),
+    test_name VARCHAR(50) NOT NULL,
+    test_content text,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE exercises (
+    id BIGINT PRIMARY KEY,
+    lesson_id BIGINT NOT NULL REFERENCES lessons(id),
+    exercise_name VARCHAR(50) NOT NULL,
+    exercise_url VARCHAR (200),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
