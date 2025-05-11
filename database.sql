@@ -52,7 +52,7 @@ CREATE TABLE lessons(
     name VARCHAR (50) NOT NULL,
     content text,
     video_url VARCHAR (200),
-    position   INT NOT NULL CHECK (position > 0),
+    position   INT NOT NULL DEFAULT 1 CHECK (position > 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     course_id BIGINT NOT NULL REFERENCES courses(id)
