@@ -15,8 +15,9 @@ CREATE TABLE users(
     teaching_group_id BIGINT NOT NULL REFERENCES teaching_groups(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
+    deleted_at TIMESTAMP DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 );
 
 CREATE TABLE programs(
@@ -147,7 +148,7 @@ CREATE TYPE status AS ENUM ('created', 'in_moderation', 'published', 'archived')
 CREATE TABLE blog (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
-    name VARCHAR(50) NOT NULL,
+    title VARCHAR(50) NOT NULL,
     content text,
     status status NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
