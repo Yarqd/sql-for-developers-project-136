@@ -55,7 +55,7 @@ CREATE TABLE lessons(
     position   INT NOT NULL DEFAULT 1 CHECK (position > 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    course_id BIGINT NOT NULL REFERENCES courses(id)
+    course_id BIGINT REFERENCES courses(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     deleted_at TIMESTAMP DEFAULT NULL
