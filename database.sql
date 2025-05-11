@@ -24,7 +24,6 @@ CREATE TABLE programs(
     name VARCHAR (50) NOT NULL,
     price NUMERIC (10, 2) NOT NULL,
     program_type VARCHAR (30) NOT NULL,
-    description text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -79,6 +78,7 @@ CREATE TABLE enrollments (
     user_id BIGINT NOT NULL REFERENCES users(id),
     program_id BIGINT NOT NULL REFERENCES programs(id),
     status subscription NOT NULL,
+    deleted_at TIMESTAMP DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -101,7 +101,7 @@ CREATE TABLE program_completions (
     program_id BIGINT NOT NULL REFERENCES programs(id),
     status completion NOT NULL,
     started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    finish_date TIMESTAMP,
+    completed_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
