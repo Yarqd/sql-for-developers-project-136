@@ -40,7 +40,7 @@ CREATE TABLE lessons(
     deleted_at TIMESTAMP DEFAULT NULL
 );
 
-CREATE TABLE module_courses (
+CREATE TABLE course_modules (
     module_id BIGINT NOT NULL REFERENCES modules (id) ON DELETE CASCADE,
     course_id BIGINT NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
     PRIMARY KEY (module_id, course_id)
@@ -58,7 +58,7 @@ CREATE TABLE users(
     name VARCHAR (50) NOT NULL UNIQUE,
     role user_role NOT NULL,
     email text NOT NULL UNIQUE,
-    password VARCHAR (50) NOT NULL,
+    password_hash VARCHAR (50) NOT NULL,
     teaching_group_id BIGINT NOT NULL REFERENCES teaching_groups(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -86,7 +86,7 @@ CREATE TABLE enrollments (
 CREATE TYPE payment AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TABLE payments (
     id BIGINT PRIMARY KEY,
-    subscription_id BIGINT NOT NULL REFERENCES enrollments(id),
+    enrollment_id BIGINT NOT NULL REFERENCES enrollments(id),
     price NUMERIC (10, 2) NOT NULL,
     payment_status payment NOT NULL,
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -99,8 +99,8 @@ CREATE TABLE program_completions (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
     program_id BIGINT NOT NULL REFERENCES programs(id),
-    completion_status completion NOT NULL,
-    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status completion NOT NULL,
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     finish_date TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -119,7 +119,7 @@ CREATE TABLE certificates (
 CREATE TABLE quizzes (
     id BIGINT PRIMARY KEY,
     lesson_id BIGINT NOT NULL REFERENCES lessons(id),
-    test_name VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
     content text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -136,6 +136,7 @@ CREATE TABLE exercises (
 
 CREATE TABLE discussions(
     id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id),
     lesson_id BIGINT NOT NULL REFERENCES lessons(id),
     text text,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -146,9 +147,9 @@ CREATE TYPE status AS ENUM ('created', 'in_moderation', 'published', 'archived')
 CREATE TABLE blog (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
-    name VARCHAR(50) NOT NULL,
-    content text,
-    article_status status NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    text text,
+    status status NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
