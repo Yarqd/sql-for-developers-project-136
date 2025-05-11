@@ -79,7 +79,6 @@ CREATE TABLE enrollments (
     user_id BIGINT NOT NULL REFERENCES users(id),
     program_id BIGINT NOT NULL REFERENCES programs(id),
     status subscription NOT NULL,
-    deleted_at TIMESTAMP DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -148,7 +147,7 @@ CREATE TYPE status AS ENUM ('created', 'in_moderation', 'published', 'archived')
 CREATE TABLE blogs (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
-    title VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
     content text,
     status status NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
