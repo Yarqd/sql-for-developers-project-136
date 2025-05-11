@@ -1,3 +1,24 @@
+CREATE TABLE teaching_groups (
+    id BIGINT PRIMARY KEY,
+    slug VARCHAR (20) NOT NULL UNIQUE ,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+CREATE TABLE users(
+    id BIGINT PRIMARY KEY,
+    name VARCHAR (50) NOT NULL UNIQUE,
+    role user_role NOT NULL,
+    email text NOT NULL UNIQUE,
+    password_hash VARCHAR (50) NOT NULL,
+    teaching_group_id BIGINT NOT NULL REFERENCES teaching_groups(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE programs(
     id BIGINT PRIMARY KEY,
     name VARCHAR (50) NOT NULL,
@@ -34,7 +55,7 @@ CREATE TABLE lessons(
     position   INT NOT NULL CHECK (position > 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    course_id BIGINT NOT NULL REFERENCES Courses(id)
+    course_id BIGINT NOT NULL REFERENCES courses(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     deleted_at TIMESTAMP DEFAULT NULL
@@ -52,33 +73,12 @@ CREATE TABLE program_modules (
     PRIMARY KEY (program_id, module_id)
 );
 
-CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
-CREATE TABLE users(
-    id BIGINT PRIMARY KEY,
-    name VARCHAR (50) NOT NULL UNIQUE,
-    role user_role NOT NULL,
-    email text NOT NULL UNIQUE,
-    password_hash VARCHAR (50) NOT NULL,
-    teaching_group_id BIGINT NOT NULL REFERENCES teaching_groups(id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE teaching_groups (
-    id BIGINT PRIMARY KEY,
-    slug VARCHAR (20) NOT NULL UNIQUE ,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TYPE subscription AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TABLE enrollments (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
     program_id BIGINT NOT NULL REFERENCES programs(id),
-    subscription_status subscription NOT NULL,
+    status subscription NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -87,9 +87,9 @@ CREATE TYPE payment AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TABLE payments (
     id BIGINT PRIMARY KEY,
     enrollment_id BIGINT NOT NULL REFERENCES enrollments(id),
-    price NUMERIC (10, 2) NOT NULL,
-    payment_status payment NOT NULL,
-    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    amount NUMERIC (10, 2) NOT NULL,
+    status payment NOT NULL,
+    paid_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -147,8 +147,8 @@ CREATE TYPE status AS ENUM ('created', 'in_moderation', 'published', 'archived')
 CREATE TABLE blog (
     id BIGINT PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES users(id),
-    title VARCHAR(50) NOT NULL,
-    text text,
+    name VARCHAR(50) NOT NULL,
+    content text,
     status status NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
